@@ -7,12 +7,24 @@ K-fold cross validation is supported.
 import argparse as ap
 import numpy as np
 
+from typing import List, Optional
+
 from sklearn.metrics import roc_curve, roc_auc_score, auc
 
 from matplotlib import pyplot as plt
 
 
-def plot(fin, output=None):
+def plot(fin: List[str], output: Optional[str] = None) -> None:
+    """
+    Plot ROC curves.
+
+    Arguments:
+        fin (list[str]): List of input files
+        output (str, optional): Output file for the plot
+
+    .. note::
+        If :param output: is not specified, the plot is shown interactively.
+    """
     plt.figure()
     ax = plt.subplot(
         1,
@@ -56,9 +68,15 @@ def plot(fin, output=None):
         plt.show()
 
 
-def parse(args=None):
+def parse(args: Optional[str] = None) -> ap.Namespace:
     """
     Parse command-line arguments.
+
+    Arguments:
+        args (str, optional): String to parse
+    
+    .. note::
+        If `args is None` the string to parse is red from `sys.argv`
     """
 
     # Parser
@@ -69,9 +87,7 @@ def parse(args=None):
     parser.add_argument("-o", "--output", default=None)
 
     # Parse arguments
-    args = parser.parse_args(args)
-
-    return args
+    return parser.parse_args(args)
 
 
 if __name__ == "__main__":
