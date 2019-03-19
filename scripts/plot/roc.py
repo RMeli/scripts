@@ -76,7 +76,7 @@ def parse(args: Optional[str] = None) -> ap.Namespace:
         args (str, optional): String to parse
     
     .. note::
-        If `args is None` the string to parse is red from `sys.argv`
+        If ``args is None`` the string to parse is red from ``sys.argv``
     """
 
     # Parser
