@@ -18,12 +18,12 @@ def plot(fin: List[str], output: Optional[str] = None) -> None:
     """
     Plot ROC curves.
 
-    Arguments:
-        fin (list[str]): List of input files
+    Args:
+        fin (List[str]): List of input files
         output (str, optional): Output file for the plot
 
     .. note::
-        If :param output: is not specified, the plot is shown interactively.
+        If ``output`` is not specified, the plot is shown interactively.
     """
     plt.figure()
     ax = plt.subplot(
@@ -72,9 +72,12 @@ def parse(args: Optional[str] = None) -> ap.Namespace:
     """
     Parse command-line arguments.
 
-    Arguments:
+    Args:
         args (str, optional): String to parse
     
+    Returns:
+        An `ap.Namespace` containing the parsed options
+
     .. note::
         If ``args is None`` the string to parse is red from ``sys.argv``
     """

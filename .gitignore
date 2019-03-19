@@ -2,5 +2,8 @@
 __pycache__
 .mypy_cache
 
+# docs
+docs/build/
+
 # editors
 .vscode
