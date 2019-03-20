@@ -2,13 +2,13 @@
 
 ## Installation
 
-```
+```bash
 pip install .
 ```
 
 ### Development
 
-```
+```bash
 pip install -e .
 ```
 
@@ -18,14 +18,14 @@ This Python package is documented using [Sphinx](http://www.sphinx-doc.org/en/ma
 
 ### Automatic Generation
 
-```
+```bash
 cd docs
 sphinx-apidoc -f -o source/ ../scripts/ 
 ```
 
 ### Build
 
-```
+```bash
 cd docs
 make html
 ```
