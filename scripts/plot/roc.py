@@ -1,8 +1,8 @@
 """
 Plot Receiver Operating Characteristic (ROC) curve.
 
-The ROC curve is obtained by plotting the *true positive rate* (TPR, also known as 
-*sensitivity* or *recall*)
+The ROC curve, a caracteristic of a binary classifier, is obtained by plotting the 
+*true positive rate* (TPR, also known as *sensitivity* or *recall*)
 
 .. math::
     \\text{TPR} = \\frac{\\text{TP}}{\\text{TP} + \\text{FN}}
@@ -17,18 +17,21 @@ where :math:`\\text{TP}`, :math:`\\text{TN}`, :math:`\\text{FP}`, and :math:`\\t
 are the number of true positives, true negatives, false positives, and false negatives,
 respectively.
 
+Here, the ROC curve is plotted from the true binary labels (:math:`[0,1]` or 
+:math:`[-1,1]`) and the target scores (as probability estimates or confidence values).
+
 .. note::
-    K-fold cross validation is supported.
+    For K-fold cross validation, multiple ROC curves can be plotted together.
 """
 
 import argparse as ap
 import numpy as np
 
-from typing import Tuple, List, Optional
-
 from sklearn.metrics import roc_curve, roc_auc_score, auc
 
 from matplotlib import pyplot as plt
+
+from typing import Tuple, List, Optional
 
 
 def _roc_auc(fname: str) -> Tuple[np.array, np.array, float]:
@@ -57,6 +60,7 @@ def _roc_auc(fname: str) -> Tuple[np.array, np.array, float]:
     fpr, tpr, ths = roc_curve(y_true, y_score)
 
     return fpr, tpr, auc
+
 
 def plot(fin: List[str], output: Optional[str] = None) -> None:
     """
@@ -87,18 +91,18 @@ def plot(fin: List[str], output: Optional[str] = None) -> None:
     # Plot ROC for random classifier
     ax.plot([0, 1], [0, 1], "--", label="Random", color="grey", lw=0.5)
 
-    if len(fin) == 1: # Only one ROC
+    if len(fin) == 1:  # Only one ROC
 
         fpr, tpr, auc_score = _roc_auc(fin[0])
 
         # Plot ROC
         ax.plot(fpr, tpr, label=f"AUC = {auc_score:.2f}")
 
-    else: # Multiple ROCs (for different folds)
+    else:  # Multiple ROCs (for different folds)
 
-        for idx, f in enumerate(fin): # Iterate over folds
+        for idx, f in enumerate(fin):  # Iterate over folds
 
-            fpr, tpr, auc_score = _roc_auc(fin[0])
+            fpr, tpr, auc_score = _roc_auc(f)
 
             # Plot ROC
             ax.plot(fpr, tpr, label=f"Fold {idx} (AUC = {auc_score:.2f})")
