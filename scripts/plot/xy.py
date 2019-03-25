@@ -126,8 +126,12 @@ def parse(args: Optional[str] = None) -> ap.Namespace:
     parser.add_argument("-t", "--title", default=None, type=str, help="Plot title")
     parser.add_argument("-lx", "--xlabel", default=None, type=str, help="x-axis label")
     parser.add_argument("-ly", "--ylabel", default=None, type=str, help="y-axis label")
-    parser.add_argument("-xm", "--xmult", default=1.0, type=float, help="x-value(s) multiplier")
-    parser.add_argument("-ym", "--ymult", default=1.0, type=float, help="y-value(s) multiplier")
+    parser.add_argument(
+        "-xm", "--xmult", default=1.0, type=float, help="x-value(s) multiplier"
+    )
+    parser.add_argument(
+        "-ym", "--ymult", default=1.0, type=float, help="y-value(s) multiplier"
+    )
 
     # Parse arguments
     return parser.parse_args(args)

@@ -62,7 +62,8 @@ def _roc_auc(fname: str) -> Tuple[np.array, np.array, float]:
 
     return fpr, tpr, auc
 
-def _get_colormap(n : int, groups: int, c_min: float=0.3, c_max:float=0.8):
+
+def _get_colormap(n: int, groups: int, c_min: float = 0.3, c_max: float = 0.8):
     """
     Get colormap for different groups
 
@@ -86,15 +87,17 @@ def _get_colormap(n : int, groups: int, c_min: float=0.3, c_max:float=0.8):
     """
 
     if groups == 0:
-        return cm.tab10(np.linspace(0,1,n))
+        return cm.tab10(np.linspace(0, 1, n))
 
     # Check number of groups
     if groups > 4:
         raise ValueError("A maximum of 4 groups is supported.")
-    
+
     # Check that all groups have the same number of elements
     if n % groups != 0:
-        raise ValueError("The number of plots should be a multiple of the number of groups.")
+        raise ValueError(
+            "The number of plots should be a multiple of the number of groups."
+        )
 
     plots_per_group = n // groups
 
@@ -168,17 +171,19 @@ def plot(fin: List[str], output: Optional[str] = None, groups=0, labels=None) ->
         # Cyclic iterator over folds
         fold = itertools.cycle(range(n_folds))
 
-        if labels is not None: 
+        if labels is not None:
             if len(labels) != groups:
-                raise ValueError("The number of labels should be the same as the number of groups.")
-            
+                raise ValueError(
+                    "The number of labels should be the same as the number of groups."
+                )
+
             labels = [l for label in labels for l in itertools.repeat(label, n_folds)]
 
         for idx, f in enumerate(fin):  # Iterate over folds
 
             fpr, tpr, auc_score = _roc_auc(f)
 
-            label=f"Fold {next(fold)} (AUC = {auc_score:.2f})"
+            label = f"Fold {next(fold)} (AUC = {auc_score:.2f})"
 
             if labels is not None:
                 label = f"{labels[idx]} " + label

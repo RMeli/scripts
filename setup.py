@@ -10,7 +10,7 @@ setup(
     license="MIT",
     description="",
     long_description=long_description,
-    long_description_content_type="text/markdown", # GitHub-flavored Markdown
+    long_description_content_type="text/markdown",  # GitHub-flavored Markdown
     packages=setuptools.find_packages(),
     install_requires=[],
     python_requires=">=3.6",
