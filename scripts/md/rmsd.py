@@ -137,7 +137,7 @@ def parse(args: Optional[str] = None) -> ap.Namespace:
 
     # Add arguments
     parser.add_argument("-x", "--traj", type=str, required=True, help="Trajectory file")
-    parser.add_argument("-t", "--top", type=str, help="Topology file")
+    parser.add_argument("-t", "--top", type=str, default=None, help="Topology file")
     parser.add_argument("-r", "--ref", type=str, default=None, help="Reference file")
     parser.add_argument(
         "-m",
@@ -156,14 +156,18 @@ def parse(args: Optional[str] = None) -> ap.Namespace:
 
 
 if __name__ == "__main__":
-
-    import numpy as np
+    import os
 
     args = parse()
 
-    # TODO: Check if files exist
+    if not os.path.isfile(args.traj):
+        raise FileNotFoundError(args.traj)
+    if args.top is not None and not os.path.isfile(args.top):
+        raise FileNotFoundError(args.top)
+    if args.ref is not None and not os.path.isfile(args.ref):
+        raise FileNotFoundError(args.ref)
 
-    # Compute RMSD ([frame, time (ps), RMSD (A)])
+    # Compute RMSD ([frame, RMSD (A)])
     rmsd = compute_rmsd(args.traj, args.top, args.ref, args.mask)
 
     # Save RMSD to file
