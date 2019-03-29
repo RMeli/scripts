@@ -42,8 +42,10 @@ def compute_rmsd(
     if reimage:
         traj = pt.autoimage(traj)
 
+    print(traj, ref)
+
     # Compute RMSD (symmetrized)
-    rmsd = pt.analysis.rmsd.symmrmsd(traj, fit=False)
+    rmsd = pt.analysis.rmsd.symmrmsd(traj, mask=mask, ref=ref, ref_mask=mask, fit=False)
 
     # TODO: Add time
 

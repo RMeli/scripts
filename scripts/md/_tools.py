@@ -51,7 +51,7 @@ def load_ref(
     ref = pt.load(iref, itop, mask=mask)
 
     if ref.n_frames != 1:
-        raise ValueError("ERROR: Reference structure should contain only one frame.")
+        raise ValueError(f"Reference structure contains {ref.n_frames} frames.")
 
     return ref[0]
 

@@ -3,5 +3,5 @@ numpy
 scikit-learn
 pytraj
 
-matplotlib
+matplotlib>3.0
 seaborn
