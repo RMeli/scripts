@@ -11,6 +11,7 @@ before_install:
 install:
     - pip install -r scripts/requirements.txt
     - pip install -r tests/requirements.txt
+    - pip install .
 
 script:
     - pytest --cov=./
