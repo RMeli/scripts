@@ -1,8 +1,14 @@
 language: python
 
+dist: xenial
+
 python:
     - 3.6
     - 3.7
+    - 3.8-dev
+
+before_install:
+    - python -m pip install --upgrade pip
 
 install:
     - pip install -r scripts/requirements.txt
