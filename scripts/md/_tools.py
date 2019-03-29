@@ -9,7 +9,7 @@ from typing import Optional, Tuple
 default_mask = ""
 
 
-def _load_traj(
+def load_traj(
     itraj: str, itop: Optional[str] = None, mask: str = default_mask
 ) -> pt.Trajectory:
     """
@@ -29,7 +29,7 @@ def _load_traj(
     return traj
 
 
-def _load_ref(
+def load_ref(
     iref: str, itop: Optional[str] = None, mask: str = default_mask
 ) -> pt.Frame:
     """
@@ -56,7 +56,7 @@ def _load_ref(
     return ref[0]
 
 
-def _load(
+def load_traj_and_ref(
     itraj: str,
     itop: Optional[str] = None,
     iref: Optional[str] = None,
@@ -75,10 +75,10 @@ def _load(
         Returns a `pt.Trajectory` as trajectory and a `pt.Frame` as reference structure
     """
 
-    traj = _load_traj(itraj, itop, mask)
+    traj = load_traj(itraj, itop, mask)
 
     if iref is not None:
-        ref = _load_ref(iref, itop, mask)
+        ref = load_ref(iref, itop, mask)
     else:
         ref = traj[0]
 

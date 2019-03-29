@@ -7,7 +7,7 @@ import argparse as ap
 import pytraj as pt
 import numpy as np
 
-from scripts.md._tools import _load
+from scripts.md._tools import load_traj_and_ref
 
 from typing import Optional
 
@@ -20,6 +20,7 @@ def compute_rmsd(
     itop: Optional[str] = None,
     iref: Optional[str] = None,
     mask: str = default_mask,
+    reimage: bool = False,
 ) -> np.ndarray:
     """
     Compute RMSD for a trajectory with respect to a reference structure.
@@ -35,10 +36,11 @@ def compute_rmsd(
         with respect to the reference structure `iref`.
     """
 
-    traj, ref = _load(itraj, itop, iref, mask)
+    traj, ref = load_traj_and_ref(itraj, itop, iref, mask)
 
     # Autoimage (for PBC)
-    traj = pt.autoimage(traj)
+    if reimage:
+        traj = pt.autoimage(traj)
 
     # Compute RMSD (symmetrized)
     rmsd = pt.analysis.rmsd.symmrmsd(traj, fit=False)
@@ -80,6 +82,9 @@ def parse(args: Optional[str] = None) -> ap.Namespace:
         "-o", "--output", type=str, required=True, help="RMSD output file"
     )
     parser.add_argument("--plot", action="store_true", help="Plot RMSD vs time")
+    parser.add_argument(
+        "--reimage", action="store_true", help="Re-image trajectory within PBC box"
+    )
 
     # Parse arguments
     return parser.parse_args(args)
@@ -98,7 +103,7 @@ if __name__ == "__main__":
         raise FileNotFoundError(args.ref)
 
     # Compute RMSD ([frame, RMSD (A)])
-    rmsd = compute_rmsd(args.traj, args.top, args.ref, args.mask)
+    rmsd = compute_rmsd(args.traj, args.top, args.ref, args.mask, args.reimage)
 
     # Save RMSD to file
     np.savetxt(args.output, rmsd)
