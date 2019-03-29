@@ -87,7 +87,7 @@ def _get_colormap(n: int, groups: int, c_min: float = 0.3, c_max: float = 0.8):
     """
 
     if groups == 0:
-        return cm.tab10(np.linspace(0, 1, n))
+        return plt.cm.tab10(np.linspace(0, 1, n))
 
     # Check number of groups
     if groups > 4:
