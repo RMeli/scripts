@@ -31,7 +31,7 @@ def load_traj(
 
 def load_ref(
     iref: str, itop: Optional[str] = None, mask: str = default_mask
-) -> pt.Frame:
+) -> pt.Trajectory:
     """
     Load reference structure (and topology) from file.
 
@@ -41,7 +41,7 @@ def load_ref(
         mask (str): Selection mask (in `pytraj` formart)
 
     Returns:
-        Returns a `pt.Frame` as reference structure
+        Returns a `pt.Trajectory` as reference structure
 
     Raises:
         ValueError: An error occurs when the reference structure contains more than one
@@ -53,33 +53,4 @@ def load_ref(
     if ref.n_frames != 1:
         raise ValueError(f"Reference structure contains {ref.n_frames} frames.")
 
-    return ref[0]
-
-
-def load_traj_and_ref(
-    itraj: str,
-    itop: Optional[str] = None,
-    iref: Optional[str] = None,
-    mask: str = default_mask,
-) -> Tuple[pt.Trajectory, pt.Frame]:
-    """
-    Load reference structure (and topology) from file.
-
-    Args:
-        itraj (str): Trajectory file name
-        itop (str): Topology file name
-        iref (str): Reference structure file name
-        mask (str): Selection mask (in `pytraj` formart)
-
-    Returns:
-        Returns a `pt.Trajectory` as trajectory and a `pt.Frame` as reference structure
-    """
-
-    traj = load_traj(itraj, itop, mask)
-
-    if iref is not None:
-        ref = load_ref(iref, itop, mask)
-    else:
-        ref = traj[0]
-
-    return traj, ref
+    return ref

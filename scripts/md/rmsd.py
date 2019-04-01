@@ -7,7 +7,7 @@ import argparse as ap
 import pytraj as pt
 import numpy as np
 
-from scripts.md._tools import load_traj_and_ref
+from scripts.md._tools import load_traj, load_ref
 
 from typing import Optional
 
@@ -19,7 +19,7 @@ def compute_rmsd(
     itraj: str,
     itop: Optional[str] = None,
     iref: Optional[str] = None,
-    mask: str = default_mask,
+    lig_mask: str = default_mask,
     reimage: bool = False,
 ) -> np.ndarray:
     """
@@ -29,27 +29,34 @@ def compute_rmsd(
         itraj (str): Trajectory file name
         itop (str, optional): Topology file name
         iref (str, optional): Reference file name
-        mask (str, optional): Selection mask (in `pytraj` format)
+        lig_mask (str, optional): Selection mask (in `pytraj` format) for the ligand
+        reimage (bool): Re-image coordinates according to PBC
 
     Returns:
         Returns a `np.ndarray` containing the frame number, an the RMSD (in angstrom) 
         with respect to the reference structure `iref`.
     """
 
-    traj, ref = load_traj_and_ref(itraj, itop, iref, mask)
+    lig_traj = load_traj(itraj, itop, mask=lig_mask)
+
+    if iref is not None:
+        lig_ref = load_ref(iref, itop, mask=lig_mask)
+    else:
+        lig_ref = 0
 
     # Autoimage (for PBC)
     if reimage:
-        traj = pt.autoimage(traj)
+        lig_traj = pt.autoimage(lig_traj)
 
-    print(traj, ref)
+        if iref is not None:
+            lig_ref = pt.autoimage(lig_ref)
 
     # Compute RMSD (symmetrized)
-    rmsd = pt.analysis.rmsd.symmrmsd(traj, mask=mask, ref=ref, ref_mask=mask, fit=False)
+    rmsd = pt.analysis.rmsd.symmrmsd(lig_traj, mask=lig_mask, ref=lig_ref, ref_mask=lig_mask, fit=False)
 
     # TODO: Add time
 
-    return np.stack((np.arange(0, traj.n_frames), rmsd), axis=1)
+    return np.stack((np.arange(0, lig_traj.n_frames), rmsd), axis=1)
 
 
 def parse(args: Optional[str] = None) -> ap.Namespace:
