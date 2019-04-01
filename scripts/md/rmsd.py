@@ -3,6 +3,7 @@ Trajectory RMSD
 """
 
 import argparse as ap
+import sys
 
 import pytraj as pt
 import numpy as np
@@ -21,6 +22,7 @@ def compute_rmsd(
     iref: Optional[str] = None,
     lig_mask: str = default_mask,
     reimage: bool = False,
+    verbose: bool = False,
 ) -> np.ndarray:
     """
     Compute RMSD for a trajectory with respect to a reference structure.
@@ -37,22 +39,51 @@ def compute_rmsd(
         with respect to the reference structure `iref`.
     """
 
+    if verbose:
+        print("Loading trajectory...", file=sys.stdout, end='')
+
     lig_traj = load_traj(itraj, itop, mask=lig_mask)
 
+    if verbose:
+        print("done", file=sys.stdout)
+
     if iref is not None:
+        if verbose:
+            print("Loading reference...", file=sys.stdout, end='')
+
         lig_ref = load_ref(iref, itop, mask=lig_mask)
+
+        if verbose:
+            print("done", file=sys.stdout)
     else:
         lig_ref = 0
 
     # Autoimage (for PBC)
     if reimage:
+        if verbose:
+            print("Reimaging...", file=sys.stdout, end='')
+
         lig_traj = pt.autoimage(lig_traj)
 
         if iref is not None:
             lig_ref = pt.autoimage(lig_ref)
 
+        if verbose:
+            print("done", file=sys.stdout)
+
+    # TODO: Align trajectory with reference structure 
+    # (needs to load the whole trajectory)
+
     # Compute RMSD (symmetrized)
-    rmsd = pt.analysis.rmsd.symmrmsd(lig_traj, mask=lig_mask, ref=lig_ref, ref_mask=lig_mask, fit=False)
+    if verbose:
+        print("Computing RMSD...", file=sys.stdout, end='')
+
+    rmsd = pt.analysis.rmsd.symmrmsd(
+        lig_traj, mask=lig_mask, ref=lig_ref, ref_mask=lig_mask, fit=False
+    )
+
+    if verbose:
+        print("done", file=sys.stdout)
 
     # TODO: Add time
 
@@ -94,6 +125,9 @@ def parse(args: Optional[str] = None) -> ap.Namespace:
     parser.add_argument(
         "--reimage", action="store_true", help="Re-image trajectory within PBC box"
     )
+    parser.add_argument(
+        "-v", "--verbose", action="store_true", help="Verbose execution"
+    )
 
     # Parse arguments
     return parser.parse_args(args)
@@ -112,7 +146,7 @@ if __name__ == "__main__":
         raise FileNotFoundError(args.ref)
 
     # Compute RMSD ([frame, RMSD (A)])
-    rmsd = compute_rmsd(args.traj, args.top, args.ref, args.mask, args.reimage)
+    rmsd = compute_rmsd(args.traj, args.top, args.ref, args.mask, args.reimage, args.verbose)
 
     # Save RMSD to file
     np.savetxt(args.output, rmsd)

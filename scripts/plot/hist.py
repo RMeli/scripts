@@ -11,6 +11,7 @@ from matplotlib import pyplot as plt
 
 from typing import Optional
 
+
 def plot(options: ap.Namespace) -> None:
 
     if len(options.input) != len(options.data):
@@ -22,7 +23,7 @@ def plot(options: ap.Namespace) -> None:
     if options.labels is not None:
         if len(options.labels) != len(options.data):
             raise ValueError()
-        
+
     # Set title and labels
     if options.title is not None:
         plt.title(options.title)
@@ -39,20 +40,26 @@ def plot(options: ap.Namespace) -> None:
 
         # Get label (if exists)
         hist_kws, kde_kws = None, None
-        try: 
+        try:
             # Try to use options.labels as a list
             label = options.labels[i]
 
             if options.kde:
                 kde_kws = {"label": label}
             else:
-                hist_kws={"label": label}
+                hist_kws = {"label": label}
 
-        except TypeError: # If options.labels is not a list, a TypeError occurs
+        except TypeError:  # If options.labels is not a list, a TypeError occurs
             # Do nothing (hist_kws=None, kde_kws=None)
             pass
 
-        sns.distplot(data[:, idx], bins=options.bins, kde=options.kde, hist_kws=hist_kws, kde_kws=kde_kws)
+        sns.distplot(
+            data[:, idx],
+            bins=options.bins,
+            kde=options.kde,
+            hist_kws=hist_kws,
+            kde_kws=kde_kws,
+        )
 
     plt.xlim(left=options.left, right=options.right)
 
@@ -87,24 +94,14 @@ def parse(args: Optional[str] = None) -> ap.Namespace:
     parser.add_argument(
         "-d", "--data", nargs="+", type=int, help="Column index (indices) of the data"
     )
-    parser.add_argument("-b", "--bins", default=None, type=int, help="Number of histogram beans")
+    parser.add_argument(
+        "-b", "--bins", default=None, type=int, help="Number of histogram beans"
+    )
     parser.add_argument(
         "--kde", default=False, action="store_true", help="Kernel Density Estimate"
     )
-    parser.add_argument(
-        "-ll",
-        "--left",
-        default=None,
-        type=float,
-        help="Left limit",
-    )
-    parser.add_argument(
-        "-rl",
-        "--right",
-        default=None,
-        type=float,
-        help="Right limit",
-    )
+    parser.add_argument("-ll", "--left", default=None, type=float, help="Left limit")
+    parser.add_argument("-rl", "--right", default=None, type=float, help="Right limit")
     parser.add_argument("-o", "--output", default=None, type=str, help="Output file")
     parser.add_argument("-t", "--title", default=None, type=str, help="Plot title")
     parser.add_argument("-lx", "--xlabel", default=None, type=str, help="x-axis label")

@@ -63,7 +63,9 @@ def _roc_auc(fname: str) -> Tuple[np.array, np.array, float]:
     return fpr, tpr, auc
 
 
-def _get_colormap(n: int, groups: int, c_min: float = 0.3, c_max: float = 0.8) -> np.ndarray:
+def _get_colormap(
+    n: int, groups: int, c_min: float = 0.3, c_max: float = 0.8
+) -> np.ndarray:
     """
     Get colormap for different groups
 
@@ -113,7 +115,12 @@ def _get_colormap(n: int, groups: int, c_min: float = 0.3, c_max: float = 0.8) -
     return cmap
 
 
-def plot(fin: List[str], output: Optional[str] = None, groups: int=0, labels: Optional[List[str]]=None) -> None:
+def plot(
+    fin: List[str],
+    output: Optional[str] = None,
+    groups: int = 0,
+    labels: Optional[List[str]] = None,
+) -> None:
     """
     Plot ROC curves.
 
