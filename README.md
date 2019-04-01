@@ -1,5 +1,19 @@
 # Scripts
 
+## Description
+
+```
+python -m scripts.MODULE
+```
+
+| Module            | Description                                   |
+| :---              | ---                                           |
+| `md.rmsd`         | Compute RMSD on an MD trajectory.             |
+| `plot.hist`       | Plot histogram.                               |
+| `plot.roc`        | Plot ROC curve for binary classifier.         |
+| `plot.xy`         | Plot Y versus X.                              |
+
+
 ## Installation
 
 ```bash
