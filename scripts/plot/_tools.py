@@ -1,10 +1,10 @@
-
 import numpy as np
 
 import seaborn as sns
 
 from collections import defaultdict
 from typing import Iterable, Optional, List
+
 
 def check_groups(groups: List[int]) -> int:
 
@@ -34,10 +34,10 @@ def get_colormap(groups: Optional[List[int]] = None) -> np.ndarray:
     # Setup n color palettes, indexed by group
     # Get a MLP palette by name (as list of RGB values), reverse the color order
     # (with [::-1]) and make it iterable (so that next can be called later)
-    palettes = { g : iter(sns.mpl_palette(names[g])[::-1]) for g in range(n)}
-    
+    palettes = {g: iter(sns.mpl_palette(names[g])[::-1]) for g in range(n)}
+
     colors = []
     for group in groups:
-        colors.append( next(palettes[group]) )
+        colors.append(next(palettes[group]))
 
     return np.asarray(colors)
