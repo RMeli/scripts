@@ -14,11 +14,36 @@ from typing import Optional
 
 def plot(options: ap.Namespace) -> None:
 
-    if len(options.input) != len(options.data):
-        raise ValueError()
+    if len(options.data) != len(options.input):
+        raise ValueError("Inconsistent number of input files and data columns.")
 
-    plt.figure()
+    # Check number of groups
+    g_max = len(options.input) # One input per group
+    groups = [0] * g_max # All inputs in the same group by default
+    if options.groups is not None:
+        if len(options.groups) != len(options.input):
+            raise ValueError("Inconsistent number of input files and groups.")
 
+        # Check group index bounds
+        for g in options.groups:
+            if g < 0 or g >= g_max:
+                raise ValueError(f"Group index {g} is out of bounds [{0},{g_max})")
+
+        # Check that group indices are consecutive
+        m = max(options.groups)
+        for idx in range(m):
+            if idx not in options.groups:
+                raise ValueError(f"Group indices are not consecutive.")
+
+        groups = options.groups
+
+    n_plots = max(groups) + 1
+    fig, axes = plt.subplots(1, n_plots, figsize=(5 * n_plots,4))
+
+    # Make axes iterable for a single plot
+    if n_plots == 1:
+        axes = [axes] 
+    
     # Check number of labels
     if options.labels is not None:
         if len(options.labels) != len(options.data):
@@ -26,15 +51,19 @@ def plot(options: ap.Namespace) -> None:
 
     # Set title and labels
     if options.title is not None:
-        plt.title(options.title)
+        fig.suptitle(options.title)
     if options.xlabel is not None:
-        plt.xlabel(options.xlabel)
+        for ax in axes:
+            ax.set_xlabel(options.xlabel)
 
     # Load data
     data = np.loadtxt(options.input[0])
     for fname in options.input[1:]:
         d = np.loadtxt(fname)
         data = np.hstack((data, d))
+
+    # Get colormap
+    cm = sns.color_palette()
 
     for i, idx in enumerate(options.data):
 
@@ -59,9 +88,12 @@ def plot(options: ap.Namespace) -> None:
             kde=options.kde,
             hist_kws=hist_kws,
             kde_kws=kde_kws,
+            color=cm[i],
+            ax=axes[groups[i]]
         )
 
-    plt.xlim(left=options.left, right=options.right)
+    for ax in axes:
+        ax.set_xlim(left=options.left, right=options.right)
 
     if options.labels is not None:
         plt.legend()
@@ -108,6 +140,9 @@ def parse(args: Optional[str] = None) -> ap.Namespace:
     parser.add_argument("-ly", "--ylabel", default=None, type=str, help="y-axis label")
     parser.add_argument(
         "-l", "--labels", nargs="*", default=None, type=str, help="Labels"
+    )
+    parser.add_argument(
+        "-g", "--groups", nargs="*", default=None, type=int, help="Group indices"
     )
 
     # Parse arguments
