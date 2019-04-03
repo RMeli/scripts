@@ -1,5 +1,6 @@
 # python
 *egg-info*
+*.pyc
 
 # caches
 __pycache__

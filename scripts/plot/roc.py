@@ -89,8 +89,6 @@ def plot(
         If ``groups==0`` each plot is considered as a different fold of the same group.
     """
 
-    cmap = get_colormap(groups)
-
     # Figure
     plt.figure()
     ax = plt.subplot(
@@ -104,6 +102,9 @@ def plot(
         xlabel="False Positive Rate",
         ylabel="True Positive Rate",
     )
+
+    # Get color map
+    cmap = get_colormap(groups)
 
     # Plot ROC for random classifier
     ax.plot([0, 1], [0, 1], "--", label="Random", color="grey", lw=0.5)
