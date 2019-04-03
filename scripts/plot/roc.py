@@ -24,6 +24,8 @@ Here, the ROC curve is plotted from the true binary labels (:math:`[0,1]` or
     For K-fold cross validation, multiple ROC curves can be plotted together.
 """
 
+from scripts.plot._tools import get_colormap
+
 import argparse as ap
 import itertools
 import numpy as np
@@ -63,62 +65,10 @@ def _roc_auc(fname: str) -> Tuple[np.array, np.array, float]:
     return fpr, tpr, auc
 
 
-def _get_colormap(
-    n: int, groups: int, c_min: float = 0.3, c_max: float = 0.8
-) -> np.ndarray:
-    """
-    Get colormap for different groups
-
-    Each group (which contains the same number of folds) is colored with a different
-    color.
-
-    Args:
-        n (int): Total number of plots
-        groups (int): Number of groups
-        c_min (float, optional): Minimum color range
-        c_max (float, optional): Maximum color range
-
-    Returns:
-        Returns a colormap, i.e. a Numpy array containing RGB values for the colors,
-        ordered by group.
-
-    Raises:
-        ValueError: An error occurs when the number of groups is higher than 4.
-        ValueError: An error occurs when the number of plots is not a multiple of the
-            number of groups.
-    """
-
-    if groups == 0:
-        return plt.cm.tab10(np.linspace(0, 1, n))
-
-    # Check number of groups
-    if groups > 4:
-        raise ValueError("A maximum of 4 groups is supported.")
-
-    # Check that all groups have the same number of elements
-    if n % groups != 0:
-        raise ValueError(
-            "The number of plots should be a multiple of the number of groups."
-        )
-
-    plots_per_group = n // groups
-
-    cmap_names = ["Blues", "Reds", "Greens", "Purples"]
-
-    c_range = np.linspace(c_min, c_max, plots_per_group)
-
-    cmap = plt.cm.get_cmap(cmap_names[0])(c_range)
-    for idx in range(1, groups):
-        colors = plt.cm.get_cmap(cmap_names[idx])(c_range)
-        cmap = np.concatenate((cmap, colors))
-
-    return cmap
-
-
 def plot(
     fin: List[str],
     output: Optional[str] = None,
-    groups: int = 0,
+    groups: Optional[List[int]] = None,
     labels: Optional[List[str]] = None,
 ) -> None:
     """
@@ -139,9 +89,7 @@ def plot(
         If ``groups==0`` each plot is considered as a different fold of the same group.
     """
 
-    n = len(fin)
-
-    cmap = _get_colormap(n, groups)
+    cmap = get_colormap(groups)
 
     # Figure
     plt.figure()
@@ -160,43 +108,22 @@ def plot(
     # Plot ROC for random classifier
     ax.plot([0, 1], [0, 1], "--", label="Random", color="grey", lw=0.5)
 
-    if n == 1:  # Only one ROC
-
-        fpr, tpr, auc_score = _roc_auc(fin[0])
-
-        # Plot ROC
-        ax.plot(fpr, tpr, label=f"AUC = {auc_score:.2f}", color=cmap[0])
-
-    else:  # Multiple ROCs
-
-        # Compute number of folds
-        if groups == 0:
-            n_folds = n
-        else:
-            n_folds = n // groups
-
-        # Cyclic iterator over folds
-        fold = itertools.cycle(range(n_folds))
-
-        if labels is not None:
-            if len(labels) != groups:
-                raise ValueError(
-                    "The number of labels should be the same as the number of groups."
+    if labels is not None:
+        if len(labels) != len(fin):
+            raise ValueError(
+                    "The number of labels should be the same as the number of inputs."
                 )
 
-            labels = [l for label in labels for l in itertools.repeat(label, n_folds)]
+    for idx, f in enumerate(fin):
+        fpr, tpr, auc_score = _roc_auc(f)
 
-        for idx, f in enumerate(fin):  # Iterate over folds
+        try:
+            label = f"{labels[idx]} (AUC = {auc_score:.2f})"
+        except:
+            label = f"AUC = {auc_score:.2f}"
 
-            fpr, tpr, auc_score = _roc_auc(f)
-
-            label = f"Fold {next(fold)} (AUC = {auc_score:.2f})"
-
-            if labels is not None:
-                label = f"{labels[idx]} " + label
-
-            # Plot ROC
-            ax.plot(fpr, tpr, label=label, color=cmap[idx])
+        # Plot ROC
+        ax.plot(fpr, tpr, label=label, color=cmap[idx])
 
     # Set legend
     ax.legend(loc="lower right")
@@ -228,7 +155,7 @@ def parse(args: Optional[str] = None) -> ap.Namespace:
     # Add arguments
     parser.add_argument("-i", "--input", nargs="+", type=str, required=True)
     parser.add_argument("-o", "--output", default=None, type=str)
-    parser.add_argument("-g", "--groups", default=0, type=int)
+    parser.add_argument("-g", "--groups", nargs="*", default=None, type=int)
     parser.add_argument("-l", "--labels", nargs="*", default=None, type=str)
 
     # Parse arguments

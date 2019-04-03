@@ -2,6 +2,8 @@
 Histogram plot
 """
 
+from scripts.plot._tools import get_colormap
+
 import argparse as ap
 
 import numpy as np
@@ -73,7 +75,7 @@ def plot(options: ap.Namespace) -> None:
             ax.set_xlabel(options.xlabel)
 
     # Get colormap
-    cm = sns.color_palette()
+    cm = get_colormap()
 
     for i, idx in enumerate(options.data):
 
