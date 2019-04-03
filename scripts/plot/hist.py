@@ -34,8 +34,8 @@ def plot(options: ap.Namespace) -> None:
         raise ValueError("Inconsistent number of input files and data columns.")
 
     # Check number of groups
-    g_max = len(options.input) # One input per group
-    groups = [0] * g_max # All inputs in the same group by default
+    g_max = len(options.input)  # One input per group
+    groups = [0] * g_max  # All inputs in the same group by default
     if options.groups is not None:
         if len(options.groups) != len(options.input):
             raise ValueError("Inconsistent number of input files and groups.")
@@ -54,12 +54,12 @@ def plot(options: ap.Namespace) -> None:
         groups = options.groups
 
     n_plots = max(groups) + 1
-    fig, axes = plt.subplots(1, n_plots, figsize=(5 * n_plots,4))
+    fig, axes = plt.subplots(1, n_plots, figsize=(5 * n_plots, 4))
 
     # Make axes iterable for a single plot
     if n_plots == 1:
-        axes = [axes] 
-    
+        axes = [axes]
+
     # Check number of labels
     if options.labels is not None:
         if len(options.labels) != len(options.data):
@@ -102,7 +102,7 @@ def plot(options: ap.Namespace) -> None:
             hist_kws=hist_kws,
             kde_kws=kde_kws,
             color=cm[i],
-            ax=axes[groups[i]]
+            ax=axes[groups[i]],
         )
 
     for ax in axes:

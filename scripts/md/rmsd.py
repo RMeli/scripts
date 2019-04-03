@@ -40,7 +40,7 @@ def compute_rmsd(
     """
 
     if verbose:
-        print("Loading trajectory...", file=sys.stdout, end='')
+        print("Loading trajectory...", file=sys.stdout, end="")
 
     lig_traj = load_traj(itraj, itop, mask=lig_mask)
 
@@ -49,7 +49,7 @@ def compute_rmsd(
 
     if iref is not None:
         if verbose:
-            print("Loading reference...", file=sys.stdout, end='')
+            print("Loading reference...", file=sys.stdout, end="")
 
         lig_ref = load_ref(iref, itop, mask=lig_mask)
 
@@ -61,7 +61,7 @@ def compute_rmsd(
     # Autoimage (for PBC)
     if reimage:
         if verbose:
-            print("Reimaging...", file=sys.stdout, end='')
+            print("Reimaging...", file=sys.stdout, end="")
 
         lig_traj = pt.autoimage(lig_traj)
 
@@ -71,12 +71,12 @@ def compute_rmsd(
         if verbose:
             print("done", file=sys.stdout)
 
-    # TODO: Align trajectory with reference structure 
+    # TODO: Align trajectory with reference structure
     # (needs to load the whole trajectory)
 
     # Compute RMSD (symmetrized)
     if verbose:
-        print("Computing RMSD...", file=sys.stdout, end='')
+        print("Computing RMSD...", file=sys.stdout, end="")
 
     rmsd = pt.analysis.rmsd.symmrmsd(
         lig_traj, mask=lig_mask, ref=lig_ref, ref_mask=lig_mask, fit=False
@@ -146,7 +146,9 @@ if __name__ == "__main__":
         raise FileNotFoundError(args.ref)
 
     # Compute RMSD ([frame, RMSD (A)])
-    rmsd = compute_rmsd(args.traj, args.top, args.ref, args.mask, args.reimage, args.verbose)
+    rmsd = compute_rmsd(
+        args.traj, args.top, args.ref, args.mask, args.reimage, args.verbose
+    )
 
     # Save RMSD to file
     np.savetxt(args.output, rmsd)
