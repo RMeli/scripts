@@ -24,6 +24,10 @@ def plot(options: ap.Namespace) -> None:
     .. note:
         See the :func:`parser` for a description of all the possible command line
         arguments.
+
+    .. note:
+        The column index specified with `-d` (or `--data`) for every input file 
+        correspond to the column index within that file, starting from 0.
     """
 
     if len(options.data) != len(options.input):
@@ -68,16 +72,13 @@ def plot(options: ap.Namespace) -> None:
         for ax in axes:
             ax.set_xlabel(options.xlabel)
 
-    # Load data
-    data = np.loadtxt(options.input[0])
-    for fname in options.input[1:]:
-        d = np.loadtxt(fname)
-        data = np.hstack((data, d))
-
     # Get colormap
     cm = sns.color_palette()
 
     for i, idx in enumerate(options.data):
+
+        # Load data
+        data = np.loadtxt(options.input[i])
 
         # Get label (if exists)
         hist_kws, kde_kws = None, None
