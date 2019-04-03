@@ -13,6 +13,18 @@ from typing import Optional
 
 
 def plot(options: ap.Namespace) -> None:
+    """
+    Plot univariate distribution
+
+    Args:
+        options (ap.Namespace): `ap.Namespace` with command-line options
+
+    Raises:
+
+    .. note:
+        See the :func:`parser` for a description of all the possible command line
+        arguments.
+    """
 
     if len(options.data) != len(options.input):
         raise ValueError("Inconsistent number of input files and data columns.")
