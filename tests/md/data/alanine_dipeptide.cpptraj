@@ -1,0 +1,7 @@
+parm alanine_dipeptide.parm7
+trajin alanine_dipeptide.nc
+reference alanine_dipeptide.ncrst
+
+rmsd RMSD !:WAT&!@H= reference nofit out alanine_dipeptide.rmsd
+
+run
