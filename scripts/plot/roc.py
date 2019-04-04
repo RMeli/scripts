@@ -111,8 +111,8 @@ def plot(
     if labels is not None:
         if len(labels) != len(fin):
             raise ValueError(
-                    "The number of labels should be the same as the number of inputs."
-                )
+                "The number of labels should be the same as the number of inputs."
+            )
 
     for idx, f in enumerate(fin):
         fpr, tpr, auc_score = _roc_auc(f)
