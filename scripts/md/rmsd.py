@@ -12,8 +12,8 @@ from scripts.md._tools import load_traj, load_ref
 
 from typing import Optional
 
-
-default_mask = ":LIG"
+# Default mask for heavy-atom RMSD (no H) on ligand of name LIG
+default_mask = ":LIG&!@H="
 
 
 def compute_rmsd(
