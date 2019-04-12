@@ -1,5 +1,5 @@
 """
-Box-and-Wisker Plot
+Box-and-Whisker Plot
 """
 
 import argparse as ap
