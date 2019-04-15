@@ -34,7 +34,7 @@ from sklearn.metrics import roc_curve, roc_auc_score, auc
 
 from matplotlib import pyplot as plt
 
-from typing import Tuple, List, Optional
+from typing import Tuple, List, Optional, Dict, Any
 
 
 def _roc_auc(fname: str) -> Tuple[np.array, np.array, float]:
@@ -70,6 +70,7 @@ def plot(
     output: Optional[str] = None,
     groups: Optional[List[int]] = None,
     labels: Optional[List[str]] = None,
+    title: Optional[str] = None
 ) -> None:
     """
     Plot ROC curves.
@@ -98,7 +99,7 @@ def plot(
         aspect="equal",
         xlim=[-0.05, 1.05],
         ylim=[-0.05, 1.05],
-        title="Receiver Operating Characteristic",
+        title="Receiver Operating Characteristic" if title is None else title,
         xlabel="False Positive Rate",
         ylabel="True Positive Rate",
     )
@@ -135,6 +136,25 @@ def plot(
     else:
         plt.show()
 
+def args_to_dict(args: ap.Namespace) -> Dict[str, Any]:
+    """
+    Convert command line arguments to dictionary.
+
+    Args:
+        args (ap.Namespace): Command line arguments
+
+    Returns:
+        A dictionarty with kwargs and values
+    """
+
+    return {
+        "fin": args.input,
+        "output": args.output,
+        "groups": args.groups,
+        "labels": args.labels,
+        "title": args.title,
+    }
+
 
 def parse(args: Optional[str] = None) -> ap.Namespace:
     """
@@ -158,6 +178,7 @@ def parse(args: Optional[str] = None) -> ap.Namespace:
     parser.add_argument("-o", "--output", default=None, type=str)
     parser.add_argument("-g", "--groups", nargs="*", default=None, type=int)
     parser.add_argument("-l", "--labels", nargs="*", default=None, type=str)
+    parser.add_argument("-t", "--title", default=None, type=str)
 
     # Parse arguments
     return parser.parse_args(args)
@@ -167,4 +188,6 @@ if __name__ == "__main__":
 
     args = parse()
 
-    plot(args.input, args.output, args.groups, args.labels)
+    args_dict = args_to_dict(args)
+
+    plot(**args_dict)
