@@ -11,31 +11,7 @@ import numpy as np
 import seaborn as sns
 from matplotlib import pyplot as plt
 
-from typing import Optional
-
- parser.add_argument("-i", "--input", nargs="+", type=str, help="Input file")
-    parser.add_argument(
-        "-d", "--data", nargs="+", type=int, help="Column index (indices) of the data"
-    )
-    parser.add_argument(
-        "-b", "--bins", default=None, type=int, help="Number of histogram beans"
-    )
-    parser.add_argument(
-        "--kde", default=False, action="store_true", help="Kernel Density Estimate"
-    )
-    parser.add_argument("-ll", "--left", default=None, type=float, help="Left limit")
-    parser.add_argument("-rl", "--right", default=None, type=float, help="Right limit")
-    parser.add_argument("-o", "--output", default=None, type=str, help="Output file")
-    parser.add_argument("-t", "--title", default=None, type=str, help="Plot title")
-    parser.add_argument("-lx", "--xlabel", default=None, type=str, help="x-axis label")
-    parser.add_argument("-ly", "--ylabel", default=None, type=str, help="y-axis label")
-    parser.add_argument(
-        "-l", "--labels", nargs="*", default=None, type=str, help="Labels"
-    )
-    parser.add_argument(
-        "-g", "--groups", nargs="*", default=None, type=int, help="Group indices"
-    )
-
+from typing import Optional, List, Dict, Any
 
 def plot(
     input: List[str],
@@ -47,7 +23,7 @@ def plot(
     right: Optional[float] = None,
     title: Optional[str] = None,
     xlabel: Optional[str] = None,
-    ylabel: Optioanl[str] = None,
+    ylabel: Optional[str] = None,
     labels: Optional[List[str]] = None,
     groups: Optional[List[int]] = None
 ) -> None:
@@ -127,7 +103,7 @@ def plot(
     for i, idx in enumerate(data):
 
         # Load data
-        data = np.loadtxt(input[i])
+        d = np.loadtxt(input[i])
 
         # Get label (if exists)
         hist_kws, kde_kws = None, None
@@ -145,7 +121,7 @@ def plot(
             pass
 
         sns.distplot(
-            data[:, idx],
+            d[:, idx],
             bins=bins,
             kde=kde,
             hist_kws=hist_kws,
