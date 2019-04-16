@@ -2,6 +2,8 @@
 Box-and-Whisker Plot
 """
 
+import scripts.plot._tools as tools
+
 import argparse as ap
 import os
 import pandas as pd
@@ -40,9 +42,13 @@ def plot(
     xlabel: Optional[str] = None,
     ylabel: Optional[str] = None,
     legend_name: Optional[str] = None,
+    remove_outliers: bool = False,
 ) -> None:
 
     # TODO: Compute and show the average as well?
+
+    if remove_outliers:
+        df = tools.remove_outliers(df)
 
     sns.boxplot(
         data=df, x=x_name, y=y_name, hue=hue_name, notch=notch, showfliers=not swarm
@@ -107,6 +113,7 @@ def args_to_dict(args: ap.Namespace) -> Dict[str, Any]:
         "xlabel": args.xlabel,
         "ylabel": args.ylabel,
         "legend_name": args.legend,
+        "remove_outliers": args.remove_outliers,
     }
 
 def parse(args: Optional[str] = None) -> ap.Namespace:
@@ -138,6 +145,7 @@ def parse(args: Optional[str] = None) -> ap.Namespace:
     parser.add_argument("-lx", "--xlabel", type=str, default=None, help="x label")
     parser.add_argument("-ly", "--ylabel", type=str, default=None, help="y label")
     parser.add_argument("-ln", "--legend", type=str, default=None, help="Legend name")
+    parser.add_argument("--remove-outliers", default=False, action="store_true", help="Remove outliers")
 
     # Parse arguments
     return parser.parse_args(args)
