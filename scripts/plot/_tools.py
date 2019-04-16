@@ -42,19 +42,3 @@ def get_colormap(groups: Optional[List[int]] = None) -> np.ndarray:
         colors.append(next(palettes[group]))
 
     return np.asarray(colors)
-
-def remove_outliers(df: pd.DataFrame, p:float = 0.05) -> pd.DataFrame:
-    
-    low, high = p, 1-p
-
-    quantile_df = df.quantile([low, high])
-
-    df = df.apply(lambda x: x[(x > quantile_df.loc[low, x.name]) & (x < quantile_df.loc[high, x.name])])
-
-    return df
-
-
-
-
-
-
