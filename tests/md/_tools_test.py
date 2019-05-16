@@ -136,3 +136,13 @@ def test_load_traj_mda():
     water = u.select_atoms("resname WAT")
 
     assert len(water.atoms) == len(u.atoms) - len(peptide.atoms)
+
+
+def test_load_pdb_mda():
+
+    itraj = os.path.join(path, "benzene.pdb")
+
+    u = tools.load_traj_mda(itraj)
+
+    assert len(u.atoms) == 12
+    assert len(u.trajectory) == 1

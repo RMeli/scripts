@@ -27,7 +27,10 @@ def load_traj_mda(
 
     print(f"Loading trajectory {os.path.basename(itraj)}...", end="")
 
-    u = mda.Universe(itop, itraj)
+    if itop is None:
+        u = mda.Universe(itraj)
+    else:
+        u = mda.Universe(itop, itraj)
 
     print(" done")
 
