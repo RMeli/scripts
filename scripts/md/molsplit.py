@@ -10,12 +10,23 @@ import argparse as ap
 import re
 
 from collections import defaultdict
-from typing import Dict, Optional, Any
+from typing import Dict, List, Union, Optional, Any
 
 
 def split_molecules(
     u: mda.Universe, keep_ions: bool = False
-) -> Dict[str, mda.AtomGroup]:
+) -> Dict[str, Union[mda.AtomGroup, List[mda.AtomGroup]]]:
+    """
+    Split different molecules (protein, water, ligands, ...) within a structure in separate files.
+
+    Args:
+        u (mda.Universe): MDAnalysis universe
+        keep_ions (bool, optional): Flag to keep/ignore ions
+
+    Returns:
+        A dictionaty with the name of the selection and the corresponding ``mda.AtomGroup``
+        (or a list of ``mda.AtomGroup`` is there are multiple molecules with the same name).
+    """
 
     split = {}
 
@@ -57,12 +68,23 @@ def split_molecules(
 
 
 def molsplit(itraj: str, itop: Optional[str] = None, keep_ions: bool = False) -> None:
+    """
+    Split different molecules (protein, water, ligands, ...) within a structure in separate files.
+
+    Args:
+        itraj (str): Trajectory or structure file name
+        itop (str): Topology file name
+        keep_ions (bool, optional): Flag to keep/ignore ions
+
+    .. note:
+        Outputs ``.pdb`` files named ``{name}_molsplit.pdb`` if there is a single ``mda.AtomGroup``
+        with a given name and files name ``{name}_molsplit_{i}.pdb`` is there are multiple
+        ``mda.AtomGroup`` with the same name.
+    """
 
     u = tools.load_traj_mda(itraj, itop)
 
     split = split_molecules(u, keep_ions)
-
-    print(split)
 
     for name, atomgroup in split.items():
 
