@@ -33,8 +33,6 @@ def test_split_all():
 
     split = split_molecules(u, keep_ions=True)
 
-    print(split)
-
     assert len(split["protein"].atoms) == 6515
 
     assert len(split["water"].atoms) == 1500
@@ -54,8 +52,6 @@ def test_split_noions():
 
     split = split_molecules(u)
 
-    print(split)
-
     assert len(split["protein"].atoms) == 6515
 
     assert len(split["water"].atoms) == 1500
@@ -65,3 +61,25 @@ def test_split_noions():
 
     with pytest.raises(KeyError):
         split["Na+"]
+
+
+def test_split_pdb_multiple():
+    
+    itraj = os.path.join(path, "gabj.pdb")
+    
+    u = tools.load_traj_mda(itraj)
+
+    split = split_molecules(u)
+
+    assert len(split["protein"].atoms) == 6681
+
+    with pytest.raises(KeyError):
+        split["water"]
+
+    assert len(split["BQS"].atoms) == 103
+
+    assert isinstance(split["EOH"], list)
+    for res in split["EOH"]:
+        assert len(res.atoms) == 9
+
+    assert len(split["DMS"].atoms) == 10

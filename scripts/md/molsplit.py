@@ -5,10 +5,11 @@ Split different molecules
 import scripts.md._tools as tools 
 
 import MDAnalysis as mda
-import argparse as ap
 
+import argparse as ap
 import re
 
+from collections import defaultdict
 from typing import Dict, Optional, Any
 
 def split_molecules(u: mda.Universe, keep_ions: bool=False) -> Dict[str, mda.AtomGroup]:
@@ -17,7 +18,7 @@ def split_molecules(u: mda.Universe, keep_ions: bool=False) -> Dict[str, mda.Ato
 
     # Select protein
     protein = u.select_atoms("protein")
-    if len(protein.atoms) != 0:
+    if len(protein.atoms) != 0: # Check if protein is present
         split["protein"] = protein
 
     # Select water molecules
@@ -26,15 +27,29 @@ def split_molecules(u: mda.Universe, keep_ions: bool=False) -> Dict[str, mda.Ato
 
         if len(water.atoms) != 0:
             break # If selection is not empty, stop
-    if len(water.atoms) != 0:
+    if len(water.atoms) != 0: # Check if water is present
         split["water"] = water
 
     # Other molecules
     other = u.select_atoms("all") - protein - water
     for res in other.residues: # Loop over all "other" residues
         name = res.resname
-        if keep_ions or re.search("[A-Z]?[+-]", name) is None: # Remove or keep ions
+
+        if re.search("[A-Z]?[+-]", name) is not None and not keep_ions:
+            break # Skip ion if keep_ions=True
+
+        try:
+            old = split[name]
+
+            if type(old) is list:
+                split[name].append(res)
+            else:
+                split[name] = [old, res]
+
+        except KeyError:
+
             split[name] = res
+        
 
     return split
 
@@ -48,10 +63,21 @@ def molsplit(itraj: str, itop: Optional[str] = None, keep_ions: bool = False) ->
     print(split)
 
     for name, atomgroup in split.items():
-        fname = name + ".pdb"
 
-        with mda.Writer(fname, multiframe=False) as W:
-            W.write(atomgroup)
+        if isinstance(atomgroup, list): # If atomgroup is a list
+            n = len(atomgroup)
+            for i in range(n):
+                fname = f"{name}_molsplit_{i}.pdb"
+
+                with mda.Writer(fname, multiframe=False) as W:
+                    W.write(atomgroup[i])
+
+        else: # atomgroup is a single item
+
+            fname = f"{name}_molsplit.pdb"
+
+            with mda.Writer(fname, multiframe=False) as W:
+                W.write(atomgroup)
 
 
 def args_to_dict(args: ap.Namespace) -> Dict[str, Any]:
