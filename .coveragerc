@@ -1,0 +1,13 @@
+[run]
+branch = True
+source = .
+omit =
+    scripts/plot
+
+[report]
+exclude_lines =
+    # main
+    if __name__ == .__main__.:
+    raise NotImplementedError
+
+ignore_errors = True
