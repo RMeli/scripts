@@ -1,6 +1,7 @@
 [![Build Status](https://travis-ci.org/RMeli/scripts.svg?branch=master)](https://travis-ci.org/RMeli/scripts)
-[![DOI](https://zenodo.org/badge/176330398.svg)](https://zenodo.org/badge/latestdoi/176330398)
+[![codecov](https://codecov.io/gh/RMeli/scripts/branch/master/graph/badge.svg)](https://codecov.io/gh/RMeli/scripts)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![DOI](https://zenodo.org/badge/176330398.svg)](https://zenodo.org/badge/latestdoi/176330398)
 
 # Scripts
 
