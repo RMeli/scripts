@@ -1,13 +1,16 @@
 [run]
 branch = True
-source = .
+source =
+    .
+    scripts
+    tests
 omit =
     scripts/plot
 
 [report]
 exclude_lines =
-    # main
     if __name__ == .__main__.:
     raise NotImplementedError
+precision = 2
 
 ignore_errors = True

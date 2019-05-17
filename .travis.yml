@@ -10,6 +10,7 @@ python:
 
 before_install:
     - python -m pip install --upgrade pip
+    - pip install setuptools
 
 install:
     - pip install -r scripts/requirements.txt
