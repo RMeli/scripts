@@ -25,10 +25,10 @@ def test_split_protein_water():
 
 
 def test_split_all():
-    
+
     itraj = os.path.join(path, "1q72.mdcrd")
     itop = os.path.join(path, "1q72.parm7")
-    
+
     u = tools.load_traj_mda(itraj, itop)
 
     split = split_molecules(u, keep_ions=True)
@@ -44,10 +44,10 @@ def test_split_all():
 
 
 def test_split_noions():
-    
+
     itraj = os.path.join(path, "1q72.mdcrd")
     itop = os.path.join(path, "1q72.parm7")
-    
+
     u = tools.load_traj_mda(itraj, itop)
 
     split = split_molecules(u)
@@ -64,9 +64,9 @@ def test_split_noions():
 
 
 def test_split_pdb_multiple():
-    
+
     itraj = os.path.join(path, "gabj.pdb")
-    
+
     u = tools.load_traj_mda(itraj)
 
     split = split_molecules(u)

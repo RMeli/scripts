@@ -6,7 +6,8 @@ import re
 
 from typing import Dict
 
-def sas(content : str, pattern_and_repl: Dict[str, str]) -> str:
+
+def sas(content: str, pattern_and_repl: Dict[str, str]) -> str:
 
     sub_content = content
     for pattern, repl in pattern_and_repl.items():

@@ -70,7 +70,7 @@ def plot(
     output: Optional[str] = None,
     groups: Optional[List[int]] = None,
     labels: Optional[List[str]] = None,
-    title: Optional[str] = None
+    title: Optional[str] = None,
 ) -> None:
     """
     Plot ROC curves.
@@ -135,6 +135,7 @@ def plot(
         plt.savefig(output)
     else:
         plt.show()
+
 
 def args_to_dict(args: ap.Namespace) -> Dict[str, Any]:
     """

@@ -6,6 +6,7 @@ import os
 
 path = os.path.abspath("tests/utils/data/")
 
+
 def test_sas_simple():
 
     json_fname = os.path.join(path, "simple.json")

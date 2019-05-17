@@ -13,6 +13,7 @@ from matplotlib import pyplot as plt
 
 from typing import Optional, List, Dict, Any
 
+
 def plot(
     input: List[str],
     data: List[int],
@@ -25,7 +26,7 @@ def plot(
     xlabel: Optional[str] = None,
     ylabel: Optional[str] = None,
     labels: Optional[List[str]] = None,
-    groups: Optional[List[int]] = None
+    groups: Optional[List[int]] = None,
 ) -> None:
     """
     Plot univariate distribution (with kernel density estimation)
@@ -167,6 +168,7 @@ def args_to_dict(args: ap.Namespace) -> Dict[str, Any]:
         "labels": args.labels,
         "groups": args.groups,
     }
+
 
 def parse(args: Optional[str] = None) -> ap.Namespace:
     """
