@@ -78,7 +78,7 @@ def molsplit(itraj: str, itop: Optional[str] = None, keep_ions: bool = False) ->
 
     .. note:
         Outputs ``.pdb`` files named ``{name}_molsplit.pdb`` if there is a single ``mda.AtomGroup``
-        with a given name and files name ``{name}_molsplit_{i}.pdb`` is there are multiple
+        with a given name and files named ``{name}_molsplit_{i}.pdb`` if there are multiple
         ``mda.AtomGroup`` with the same name.
     """
 
