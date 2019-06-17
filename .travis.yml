@@ -4,14 +4,20 @@ dist: xenial
 
 python:
     - 3.6
-
+    - 3.7
+    - 3.7-dev
+    
 before_install:
     - python -m pip install --upgrade pip
+    - pip install setuptools
 
 install:
     - pip install -r scripts/requirements.txt
     - pip install -r tests/requirements.txt
-    - pip install .
+    - python setup.py install
 
 script:
     - pytest --cov=./
+
+after_success:
+    - codecov

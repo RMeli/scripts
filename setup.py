@@ -1,9 +1,9 @@
-from setuptools import setup
+import setuptools
 
 with open("README.md", "r") as f:
     long_description = f.read()
 
-setup(
+setuptools.setup(
     name="scripts",
     version="0.0",
     author="Rocco Meli",

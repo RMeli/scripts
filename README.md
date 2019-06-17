@@ -1,6 +1,7 @@
 [![Build Status](https://travis-ci.org/RMeli/scripts.svg?branch=master)](https://travis-ci.org/RMeli/scripts)
-[![DOI](https://zenodo.org/badge/176330398.svg)](https://zenodo.org/badge/latestdoi/176330398)
+[![codecov](https://codecov.io/gh/RMeli/scripts/branch/master/graph/badge.svg)](https://codecov.io/gh/RMeli/scripts)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![DOI](https://zenodo.org/badge/176330398.svg)](https://zenodo.org/badge/latestdoi/176330398)
 
 # Scripts
 
@@ -12,8 +13,11 @@ python -m scripts.MODULE
 
 | Module            | Description                                   |
 | :---              | ---                                           |
+| `md.molsplit`     | Split a structure in different components.    |
+| `md.reimage`      | Re-image MD trajectory according to PBC.      |
 | `md.rmsd`         | Compute RMSD on an MD trajectory.             |
-| `plot.hist`       | Plot histogram.                               |
+| `plot.bw  `       | Box and wiskers plot (with flyers).           |
+| `plot.dist`       | Plot distribution (histogram).                |
 | `plot.roc`        | Plot ROC curve for binary classifier.         |
 | `plot.xy`         | Plot Y versus X.                              |
 
