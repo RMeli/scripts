@@ -47,16 +47,16 @@ def plot(
 
     # TODO: Compute and show the average as well?
 
-    #if remove_outliers:
+    # if remove_outliers:
     #    df = tools.remove_outliers(df)
 
     if hide_fliers:
         # Do not show outliers
-        showfliers=False
+        showfliers = False
     else:
         # Do not show outliers if the swarm is plotted
         showfliers = not swarm
-    
+
     sns.boxplot(
         data=df, x=x_name, y=y_name, hue=hue_name, notch=notch, showfliers=showfliers
     )
@@ -123,6 +123,7 @@ def args_to_dict(args: ap.Namespace) -> Dict[str, Any]:
         "hide_fliers": args.hide_fliers,
     }
 
+
 def parse(args: Optional[str] = None) -> ap.Namespace:
     """
     Parse command-line arguments.
@@ -146,16 +147,23 @@ def parse(args: Optional[str] = None) -> ap.Namespace:
     parser.add_argument("-x", "--xname", type=str, default=None, help="x name")
     parser.add_argument("-y", "--yname", type=str, default=None, help="y name")
     parser.add_argument("-g", "--group", type=str, default=None, help="Hue name")
-    parser.add_argument("-s", "--swarm", default=False, action="store_true", help="Swarmplot")
-    parser.add_argument("-n", "--notch", default=False, action="store_true", help="Notch")
+    parser.add_argument(
+        "-s", "--swarm", default=False, action="store_true", help="Swarmplot"
+    )
+    parser.add_argument(
+        "-n", "--notch", default=False, action="store_true", help="Notch"
+    )
     parser.add_argument("-t", "--title", type=str, default=None, help="Plot title")
     parser.add_argument("-lx", "--xlabel", type=str, default=None, help="x label")
     parser.add_argument("-ly", "--ylabel", type=str, default=None, help="y label")
     parser.add_argument("-ln", "--legend", type=str, default=None, help="Legend name")
-    parser.add_argument("--hide-fliers", default=False, action="store_true", help="Do not show outliers")
+    parser.add_argument(
+        "--hide-fliers", default=False, action="store_true", help="Do not show outliers"
+    )
 
     # Parse arguments
     return parser.parse_args(args)
+
 
 if __name__ == "__main__":
 

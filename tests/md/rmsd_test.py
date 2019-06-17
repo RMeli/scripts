@@ -39,7 +39,9 @@ def test_rmsd_noWAT_noH():
 
     rmsd = compute_rmsd(traj, itop=top, iref=ref, lig_mask="!:WAT&!@H=")
 
-    _, rmsd_cpptraj = np.loadtxt(os.path.join(path, "alanine_dipeptide.rmsd"), unpack=True)
+    _, rmsd_cpptraj = np.loadtxt(
+        os.path.join(path, "alanine_dipeptide.rmsd"), unpack=True
+    )
 
     for idx, (_, r) in enumerate(rmsd):
         assert r == pytest.approx(rmsd_cpptraj[idx], abs=1e-3)
