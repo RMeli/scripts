@@ -30,14 +30,14 @@ import argparse as ap
 import itertools
 import numpy as np
 
-from sklearn.metrics import roc_curve, roc_auc_score, auc
+from sklearn.metrics import roc_curve, auc
 
 from matplotlib import pyplot as plt
 
-from typing import Tuple, List, Optional, Dict, Any
+from typing import Tuple, List, Optional, Dict, Any, Union
 
 
-def _roc_auc(fname: str) -> Tuple[np.array, np.array, float]:
+def _roc_auc(fname: str, positive_label: Union[int, float]) -> Tuple[np.array, np.array, float]:
     """
     Generate ROC curve and compute AUC
 
@@ -56,13 +56,13 @@ def _roc_auc(fname: str) -> Tuple[np.array, np.array, float]:
     # Load data from file
     y_true, y_score = np.loadtxt(fname, unpack=True)
 
-    # Compute AUC
-    auc = roc_auc_score(y_true, y_score)
-
     # Generate ROC curve
-    fpr, tpr, ths = roc_curve(y_true, y_score)
+    fpr, tpr, _ = roc_curve(y_true, y_score, pos_label=positive_label)
 
-    return fpr, tpr, auc
+    # Compute ROC AUC
+    rocauc = auc(fpr, tpr)
+
+    return fpr, tpr, rocauc
 
 
 def plot(
@@ -71,6 +71,7 @@ def plot(
     groups: Optional[List[int]] = None,
     labels: Optional[List[str]] = None,
     title: Optional[str] = None,
+    positive_label: Union[int, float] = 1,
 ) -> None:
     """
     Plot ROC curves.
@@ -117,7 +118,7 @@ def plot(
             )
 
     for idx, f in enumerate(fin):
-        fpr, tpr, auc_score = _roc_auc(f)
+        fpr, tpr, auc_score = _roc_auc(f, positive_label)
 
         try:
             label = f"{labels[idx]} (AUC = {auc_score:.2f})"
@@ -154,6 +155,7 @@ def args_to_dict(args: ap.Namespace) -> Dict[str, Any]:
         "groups": args.groups,
         "labels": args.labels,
         "title": args.title,
+        "positive_label": args.positive_label,
     }
 
 
@@ -175,11 +177,13 @@ def parse(args: Optional[str] = None) -> ap.Namespace:
     parser = ap.ArgumentParser(description="Plot ROC curve(s).")
 
     # Add arguments
-    parser.add_argument("-i", "--input", nargs="+", type=str, required=True)
+    parser.add_argument("input", nargs="+", type=str)
     parser.add_argument("-o", "--output", default=None, type=str)
     parser.add_argument("-g", "--groups", nargs="*", default=None, type=int)
     parser.add_argument("-l", "--labels", nargs="*", default=None, type=str)
     parser.add_argument("-t", "--title", default=None, type=str)
+    parser.add_argument("-pl", "--positive_label", default=1)
+
 
     # Parse arguments
     return parser.parse_args(args)
