@@ -1,6 +1,29 @@
 """
 Plot Precision-Recall (PC) curve.
 
+The PR curve is obtained by plotting the *precision*
+
+.. math::
+    \\text{P} = \\frac{\\text{T}_p}{\\text{T}_p + \\text{F}_p}
+
+versus the *recall*
+
+.. math::
+    \\text{P} = \\frac{\\text{T}_p}{\\text{T}_p + \\text{F}_n}
+
+where :math:`\\text{T}_p`, :math:`\\text{F}_p` and :math:`\\text{F}_pn` are the number
+of true positives, false positive and false negatives, respectively.
+
+The *average precision*
+
+.. math::
+    \\text{AP} = \\sum_{n} (R_n - R_{n-1})P_n,
+
+where :math:`\\text{R}_n` is the recall tor the :math:`n`-th threshold and 
+:math:`\\text{P}_n` is the precision tor the :math:`n`-th threshold, summarizes the PR 
+curve as the weighted average of precisions achieved at each threshold. The increase in
+recall is used as weight.
+
 .. note::
     For K-fold cross validation, multiple PR curves can be plotted together.
 """
