@@ -32,13 +32,11 @@ def skeletal(
 
     # Transform in 2D
     for mol in mols:
-        _ = AllChem.Compute2DCoords(mol)
+        AllChem.Compute2DCoords(mol)
 
     if legend:
         fnames = [os.path.basename(file) for file in files]
         names = [os.path.splitext(fname)[0] for fname in fnames]
-
-    print(names)
 
     # Draw
     img = Draw.MolsToGridImage(
