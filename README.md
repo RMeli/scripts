@@ -7,7 +7,7 @@
 
 ## Description
 
-```
+```bash
 python -m scripts.MODULE
 ```
 
@@ -16,11 +16,11 @@ python -m scripts.MODULE
 | `md.molsplit`     | Split a structure in different components.    |
 | `md.reimage`      | Re-image MD trajectory according to PBC.      |
 | `md.rmsd`         | Compute RMSD on an MD trajectory.             |
-| `plot.bw  `       | Box and wiskers plot (with flyers).           |
+| `plot.bw`         | Box and wiskers plot (with flyers).           |
 | `plot.dist`       | Plot distribution (histogram).                |
+| `plot.pr`         | Plot PR curve for binary classifier.          |
 | `plot.roc`        | Plot ROC curve for binary classifier.         |
 | `plot.xy`         | Plot Y versus X.                              |
-
 
 ## Installation
 
