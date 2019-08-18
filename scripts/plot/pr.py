@@ -105,8 +105,8 @@ def plot(
         xlim=[-0.05, 1.05],
         ylim=[-0.05, 1.05],
         title="Precision-Recall Curve" if title is None else title,
-        xlabel="Precision",
-        ylabel="Recall",
+        xlabel="Recall",
+        ylabel="Precision",
     )
 
     # Get color map
@@ -127,7 +127,7 @@ def plot(
             label = f"AP = {aps:.2f}"
 
         # Plot PR
-        ax.plot(prec, rec, label=label, color=cmap[idx])
+        ax.plot(rec, prec, label=label, color=cmap[idx])
 
     # Set legend
     ax.legend(loc="lower left")
