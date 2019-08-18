@@ -127,7 +127,7 @@ def plot(
             label = f"AP = {aps:.2f}"
 
         # Plot PR
-        ax.plot(rec, prec, label=label, color=cmap[idx])
+        ax.step(rec, prec, label=label, color=cmap[idx])
 
     # Set legend
     ax.legend(loc="lower left")
